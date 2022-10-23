@@ -14,7 +14,7 @@
   border-radius: 0.6rem;
 }
 
-.similar-product-item-name {
+.similar-product-item-title {
   margin-bottom: 1rem;
 }
 
@@ -31,7 +31,7 @@
   align-items: center;
 }
 
-.similar-product-item-name,
+.similar-product-item-title,
 .similar-product-item-price {
   color: #171f46;
   font-size: 1rem;
