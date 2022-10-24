@@ -1,8 +1,10 @@
 import {Component} from 'react'
+import Cookie from 'js-cookie'
 import Loader from 'react-loader-spinner'
 
 import Header from '../Header'
 import './index.css'
+import {response} from 'msw'
 
 const productDataAPIResponseStates = {
   initial: 'UNINITIATED',
@@ -15,6 +17,59 @@ export default class ProductItemDetails extends Component {
   state = {
     productQuantity: 1,
     productDataResponseStatus: productDataAPIResponseStates.initial,
+    productAPIResponseData: {},
+  }
+
+  componentDidMount() {
+    this.getRequestedProductDetails()
+  }
+
+  getRequestedProductDetails = async () => {
+    this.setState({
+      productDataResponseStatus: productDataAPIResponseStates.loading,
+    })
+
+    const {match} = this.props
+    const {params} = match
+    const {id} = params
+
+    const jwtToken = Cookie.get('jwt_token')
+
+    const productDataRequestUrl = `https://apis.ccbp.in/products/${id}`
+    const requestOptions = {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      method: 'GET',
+    }
+
+    const productDataAPIResponse = await fetch(
+      productDataRequestUrl,
+      requestOptions,
+    )
+    const responseJSONData = productDataAPIResponse.json()
+
+    let currentProductDataAPIResponseState = null
+    let formattedProductSpecificData = {}
+    if (productDataAPIResponse.ok) {
+      currentProductDataAPIResponseState = productDataAPIResponseStates.success
+      formattedProductSpecificData = {
+        id: responseJSONData.id,
+        imageUrl: responseJSONData.image_url,
+        title: responseJSONData.title,
+      }
+    } else {
+      currentProductDataAPIResponseState = productDataAPIResponseStates.failure
+      formattedProductSpecificData = {
+        statusCode: responseJSONData.status_code,
+        errorMsg: responseJSONData.error_msg,
+      }
+    }
+
+    this.setState({
+      productDataResponseStatus: currentProductDataAPIResponseState,
+      productAPIResponseData: formattedProductSpecificData,
+    })
   }
 
   onContinueShopping = () => {
@@ -22,23 +77,28 @@ export default class ProductItemDetails extends Component {
     history.push('./products')
   }
 
-  renderProductNotFoundView = () => (
-    <div className="product-not-found-container">
-      <img
-        className="product-not-found-img"
-        src="https://assets.ccbp.in/frontend/react-js/nxt-trendz-error-view-img.png"
-        alt="error view"
-      />
-      <h1 className="product-not-found-header">Product Not Found</h1>
-      <button
-        type="button"
-        className="continue-shopping-button"
-        onClick={this.onContinueShopping}
-      >
-        Continue Shopping
-      </button>
-    </div>
-  )
+  renderProductNotFoundView = () => {
+    const {productAPIResponseData} = this.state
+    const {errorMsg} = productAPIResponseData
+
+    return (
+      <div className="product-not-found-container">
+        <img
+          className="product-not-found-img"
+          src="https://assets.ccbp.in/frontend/react-js/nxt-trendz-error-view-img.png"
+          alt="error view"
+        />
+        <h1 className="product-not-found-header">{errorMsg}</h1>
+        <button
+          type="button"
+          className="continue-shopping-button"
+          onClick={this.onContinueShopping}
+        >
+          Continue Shopping
+        </button>
+      </div>
+    )
+  }
 
   renderThreeDotsLoader = () => (
     <div>
