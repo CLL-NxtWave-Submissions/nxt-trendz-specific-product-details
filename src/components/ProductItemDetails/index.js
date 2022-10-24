@@ -1,4 +1,5 @@
 import {Component} from 'react'
+import Loader from 'react-loader-spinner'
 
 import Header from '../Header'
 import './index.css'
@@ -39,10 +40,20 @@ export default class ProductItemDetails extends Component {
     </div>
   )
 
+  renderThreeDotsLoader = () => (
+    <div>
+      <Loader type="ThreeDots" color="#0b69ff" height={80} width={80} />
+    </div>
+  )
+
   renderUIBasedOnProductAPIResponseStatus = productAPIResponseStatus => {
     let finalUI = null
 
-    if (productAPIResponseStatus === productDataAPIResponseStates.failure) {
+    if (productAPIResponseStatus === productDataAPIResponseStates.loading) {
+      finalUI = this.renderThreeDotsLoader()
+    } else if (
+      productAPIResponseStatus === productDataAPIResponseStates.failure
+    ) {
       finalUI = this.renderProductNotFoundView()
     }
 
