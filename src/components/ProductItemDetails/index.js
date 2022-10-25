@@ -130,7 +130,10 @@ export default class ProductItemDetails extends Component {
   renderUIBasedOnProductAPIResponseStatus = productAPIResponseStatus => {
     let finalUI = null
 
-    if (productAPIResponseStatus === productDataAPIResponseStates.loading) {
+    if (
+      productAPIResponseStatus === productDataAPIResponseStates.loading ||
+      productAPIResponseStatus === productDataAPIResponseStates.initial
+    ) {
       finalUI = this.renderThreeDotsLoader()
     } else if (
       productAPIResponseStatus === productDataAPIResponseStates.failure
