@@ -23,6 +23,30 @@ export default class ProductItemDetails extends Component {
     this.getRequestedProductDetails()
   }
 
+  convertSnakeCasedProductResponseDataToCamelCasedJSON = snakeCasedData => ({
+    id: snakeCasedData.id,
+    imageUrl: snakeCasedData.image_url,
+    title: snakeCasedData.title,
+    brand: snakeCasedData.brand,
+    totalReviews: snakeCasedData.total_reviews,
+    rating: snakeCasedData.rating,
+    availability: snakeCasedData.availability,
+    similarProducts: snakeCasedData.similar_products.map(
+      similarProductListItem => ({
+        id: similarProductListItem.id,
+        imageUrl: similarProductListItem.image_url,
+        title: similarProductListItem.title,
+        style: similarProductListItem.style,
+        price: similarProductListItem.price,
+        description: similarProductListItem.description,
+        brand: similarProductListItem.brand,
+        totalReviews: similarProductListItem.total_reviews,
+        rating: similarProductListItem.rating,
+        availability: similarProductListItem.availability,
+      }),
+    ),
+  })
+
   getRequestedProductDetails = async () => {
     this.setState({
       productDataResponseStatus: productDataAPIResponseStates.loading,
@@ -46,22 +70,15 @@ export default class ProductItemDetails extends Component {
       productDataRequestUrl,
       requestOptions,
     )
-    const responseJSONData = productDataAPIResponse.json()
+    const responseJSONData = await productDataAPIResponse.json()
 
     let currentProductDataAPIResponseState = null
     let formattedProductSpecificData = {}
     if (productDataAPIResponse.ok) {
       currentProductDataAPIResponseState = productDataAPIResponseStates.success
-      formattedProductSpecificData = {
-        id: responseJSONData.id,
-        imageUrl: responseJSONData.image_url,
-        title: responseJSONData.title,
-        brand: responseJSONData.brand,
-        totalReviews: responseJSONData.total_reviews,
-        rating: responseJSONData.rating,
-        availability: responseJSONData.availability,
-        similarProducts: [],
-      }
+      formattedProductSpecificData = this.convertSnakeCasedProductResponseDataToCamelCasedJSON(
+        responseJSONData,
+      )
     } else {
       currentProductDataAPIResponseState = productDataAPIResponseStates.failure
       formattedProductSpecificData = {
