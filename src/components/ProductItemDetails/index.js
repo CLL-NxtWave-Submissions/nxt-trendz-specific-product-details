@@ -4,7 +4,6 @@ import Loader from 'react-loader-spinner'
 
 import Header from '../Header'
 import './index.css'
-import {response} from 'msw'
 
 const productDataAPIResponseStates = {
   initial: 'UNINITIATED',
@@ -57,6 +56,11 @@ export default class ProductItemDetails extends Component {
         id: responseJSONData.id,
         imageUrl: responseJSONData.image_url,
         title: responseJSONData.title,
+        brand: responseJSONData.brand,
+        totalReviews: responseJSONData.total_reviews,
+        rating: responseJSONData.rating,
+        availability: responseJSONData.availability,
+        similarProducts: [],
       }
     } else {
       currentProductDataAPIResponseState = productDataAPIResponseStates.failure
