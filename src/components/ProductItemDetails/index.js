@@ -1,8 +1,10 @@
 import {Component} from 'react'
 import Cookie from 'js-cookie'
 import Loader from 'react-loader-spinner'
+import {BsPlusSquare, BsDashSquare} from 'react-icons/bs'
 
 import Header from '../Header'
+import SimilarProductItem from '../SimilarProductItem'
 import './index.css'
 
 const productDataAPIResponseStates = {
@@ -98,6 +100,63 @@ export default class ProductItemDetails extends Component {
     history.push('./products')
   }
 
+  renderProductSpecificDetailsView = () => {
+    const {productAPIResponseData, productQuantity} = this.state
+    const {
+        imageUrl,
+        title,
+        price,
+        brand,
+        totalReviews,
+        rating,
+        availability,
+        similarProducts
+    } = productAPIResponseData
+
+    return (
+      <div className="product-item-details-bg-container">
+        <div className="product-item-details-content-container">
+            <img className="product-item-img" src={imageUrl} alt="product" />
+            <div className="product-details">
+                <h1 className="product-title">{title}</h1>
+                <p className="product-price">Rs {price}/-</p>
+                <div className="product-rating-reviews-container">
+                    <p className="product-rating">
+                        {rating}
+                        <img className="product-rating-star-img" src="https://assets.ccbp.in/frontend/react-js/star-img.png" alt="star" />
+                    </p>
+                    <p className="product-review-count">{totalReviews} Reviews</p>
+                </div>
+                <p className="product-description">{description}</p>
+                <p className="other-product-detail"><span className="other-product-detail-name">Available:</span> {availability}</p>
+                <p className="other-product-detail"><span className="other-product-detail-name">Brand:</span> {brand}</p>
+                <hr className="darker-horizontal-line-separator" />
+                <div className="product-quantity-and-cart-controls-container">
+                    <div className="product-quantity-controls-container">
+                        <button type="button" className="product-quantity-control-button">
+                            <BsDashSquare className="product-quantity-control-button-icon" />
+                        </button>
+                        <p className="product-quantity">{productQuantity}</p>
+                        <button type="button" className="product-quantity-control-button">
+                            <BsPlusSquare className="product-quantity-control-button-icon" />
+                        </button>
+                    </div>
+                    <button type="button" className="add-to-cart-button">ADD TO CART</button>
+                </div>
+            </div>
+        </div>
+        <div className="similar-products-content-container">
+            <h1 className="similar-products-header">Similar Products</h1>
+            <ul className="similar-products-list">
+                {
+                similarProducts.map(similarProductListItem => <SimilarProductItem itemData={similarProductListItem} />)
+            }
+            </ul>
+        </div>
+      </div>
+    )
+  }
+
   renderProductNotFoundView = () => {
     const {productAPIResponseData} = this.state
     const {errorMsg} = productAPIResponseData
@@ -139,7 +198,12 @@ export default class ProductItemDetails extends Component {
       productAPIResponseStatus === productDataAPIResponseStates.failure
     ) {
       finalUI = this.renderProductNotFoundView()
+    } else if (
+        productAPIResponseStatus === productDataAPIResponseStates.success
+    ) {
+        finalUI = this.renderProductSpecificDetailsView()
     }
+    )
 
     return finalUI
   }
