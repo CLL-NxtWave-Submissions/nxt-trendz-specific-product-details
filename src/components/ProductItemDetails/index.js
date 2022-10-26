@@ -100,6 +100,14 @@ export default class ProductItemDetails extends Component {
     history.push('./products')
   }
 
+  onIncreaseProductQuantity = () => this.setState(prevProductItemState => ({
+      productQuantity: prevProductItemState.productQuantity + 1
+  }))
+
+  onDecreaseProductQuantity = () => this.setState(prevProductItemState => ({
+      productQuantity: prevProductItemState.productQuantity - 1
+  }))
+
   renderProductSpecificDetailsView = () => {
     const {productAPIResponseData, productQuantity} = this.state
     const {
@@ -133,11 +141,11 @@ export default class ProductItemDetails extends Component {
                 <hr className="darker-horizontal-line-separator" />
                 <div className="product-quantity-and-cart-controls-container">
                     <div className="product-quantity-controls-container">
-                        <button type="button" className="product-quantity-control-button">
+                        <button type="button" className="product-quantity-control-button" onClick={this.onDecreaseProductQuantity}>
                             <BsDashSquare className="product-quantity-control-button-icon" />
                         </button>
                         <p className="product-quantity">{productQuantity}</p>
-                        <button type="button" className="product-quantity-control-button">
+                        <button type="button" className="product-quantity-control-button" onClick={this.onIncreaseProductQuantity}>
                             <BsPlusSquare className="product-quantity-control-button-icon" />
                         </button>
                     </div>
