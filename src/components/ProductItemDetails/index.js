@@ -116,6 +116,7 @@ export default class ProductItemDetails extends Component {
       imageUrl,
       title,
       price,
+      description,
       brand,
       totalReviews,
       rating,
