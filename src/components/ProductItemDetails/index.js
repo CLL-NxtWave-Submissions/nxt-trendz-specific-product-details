@@ -109,7 +109,10 @@ export default class ProductItemDetails extends Component {
 
   onDecreaseProductQuantity = () =>
     this.setState(prevProductItemState => ({
-      productQuantity: prevProductItemState.productQuantity - 1,
+      productQuantity:
+        prevProductItemState.productQuantity > 1
+          ? prevProductItemState.productQuantity - 1
+          : 1,
     }))
 
   renderProductSpecificDetailsView = () => {
@@ -156,6 +159,7 @@ export default class ProductItemDetails extends Component {
             <div className="product-quantity-and-cart-controls-container">
               <div className="product-quantity-controls-container">
                 <button
+                  testid="minus"
                   type="button"
                   className="product-quantity-control-button"
                   onClick={this.onDecreaseProductQuantity}
@@ -164,6 +168,7 @@ export default class ProductItemDetails extends Component {
                 </button>
                 <p className="product-quantity">{productQuantity}</p>
                 <button
+                  testid="plus"
                   type="button"
                   className="product-quantity-control-button"
                   onClick={this.onIncreaseProductQuantity}
@@ -201,7 +206,7 @@ export default class ProductItemDetails extends Component {
         <img
           className="product-not-found-img"
           src="https://assets.ccbp.in/frontend/react-js/nxt-trendz-error-view-img.png"
-          alt="error view"
+          alt="failure view"
         />
         <h1 className="product-not-found-header">{errorMsg}</h1>
         <button
@@ -216,7 +221,7 @@ export default class ProductItemDetails extends Component {
   }
 
   renderThreeDotsLoader = () => (
-    <div>
+    <div testid="loader">
       <Loader type="ThreeDots" color="#0b69ff" height={80} width={80} />
     </div>
   )
