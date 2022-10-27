@@ -99,7 +99,7 @@ export default class ProductItemDetails extends Component {
 
   onContinueShopping = () => {
     const {history} = this.props
-    history.push('./products')
+    history.replace('/products')
   }
 
   onIncreaseProductQuantity = () =>
