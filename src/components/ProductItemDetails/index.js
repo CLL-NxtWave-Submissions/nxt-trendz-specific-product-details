@@ -181,7 +181,10 @@ export default class ProductItemDetails extends Component {
           <h1 className="similar-products-header">Similar Products</h1>
           <ul className="similar-products-list">
             {similarProducts.map(similarProductListItem => (
-              <SimilarProductItem itemData={similarProductListItem} />
+              <SimilarProductItem
+                key={similarProductListItem.id}
+                itemData={similarProductListItem}
+              />
             ))}
           </ul>
         </div>
