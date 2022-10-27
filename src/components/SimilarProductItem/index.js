@@ -12,9 +12,9 @@ const SimilarProductItem = props => {
         alt={`similar product ${title}`}
       />
       <p className="similar-product-item-title">{title}</p>
-      <p className="similar-product-item-brand">{brand}</p>
+      <p className="similar-product-item-brand">by {brand}</p>
       <div className="similar-product-item-price-rating-container">
-        <p className="similar-product-item-price">{price}</p>
+        <p className="similar-product-item-price">Rs {price}/-</p>
         <p className="similar-product-item-rating">
           {rating}{' '}
           <img
