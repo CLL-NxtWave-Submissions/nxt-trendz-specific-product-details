@@ -29,6 +29,8 @@ export default class ProductItemDetails extends Component {
     id: snakeCasedData.id,
     imageUrl: snakeCasedData.image_url,
     title: snakeCasedData.title,
+    price: snakeCasedData.price,
+    description: snakeCasedData.description,
     brand: snakeCasedData.brand,
     totalReviews: snakeCasedData.total_reviews,
     rating: snakeCasedData.rating,
@@ -150,7 +152,7 @@ export default class ProductItemDetails extends Component {
             <p className="other-product-detail">
               <span className="other-product-detail-name">Brand:</span> {brand}
             </p>
-            <hr className="darker-horizontal-line-separator" />
+            <hr className="lighter-horizontal-line-separator" />
             <div className="product-quantity-and-cart-controls-container">
               <div className="product-quantity-controls-container">
                 <button
